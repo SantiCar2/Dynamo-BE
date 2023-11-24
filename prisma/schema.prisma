@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  hash      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+//--------------------------------------------------------------------------
+
+// model Product {
+//   id            Int      @id @default(autoincrement())
+//   name          String
+//   description   String
+//   SKU           String?  @unique
+
+
+//   createdAt     DateTime @default(now())
+//   updatedAt     DateTime @updatedAt
+
+//   productVariants ProductVariant[]
+
+//   @@map("products")
+// }
+
+model Product {
+  id                Int      @id @default(autoincrement())
+  name              String
+  SKU               String   @unique
+  description       String
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  //Dimensiones
+  CBM               Float   //Metros cubicos
+
+  // product           Product  @relation(fields: [parentProductSKU], references: [SKU])
+  // parentProductSKU  String   @unique
+
+  inventories       Inventory[]
+  transactions      Transaction[]
+
+  @@map("products")
+}
+
+model Inventory {
+  id          Int      @id @default(autoincrement())
+  quantity    Int
+  productSKU  String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  product     Product  @relation(fields: [productSKU], references: [SKU])
+  @@map("inventories")
+}
+
+model Transaction {
+  id            Int       @id @default(autoincrement())
+  quantity      Int
+  createdAt     DateTime  @default(now())
+
+  price         Float     //Precio de venta
+  envioColombia Float     //Precio de envio a Colombia
+  costoDolares  Float     //Costo en dolares
+  arancel       Float     //Arancel
+  iva           Float     //IVA
+  empaque       Float     //Empaque
+  publicidad    Float     //Publicidad
+  gastosOficina Float     //Gastos de oficina
+  precioDolar   Float     //Precio del dolar
+
+  serial        String?   @unique
+
+
+  product     Product  @relation(fields: [productSKU], references: [SKU])
+  productSKU  String
+  @@map("transactions")
+}
+

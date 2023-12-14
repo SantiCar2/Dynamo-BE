@@ -34,7 +34,7 @@ export class AuthService{
 
         // console.log(isValid, this.config.get('2STEP_SECRET'), dto.twoFA);
 
-        if (!isValid) throw new ForbiddenException('Invalid 2FA token');
+        if (!isValid) throw new ForbiddenException('Token de verificación de dos pasos inválido');
         //Guardar el usuario en la base de datos
         try {
             const user = await this.prisma.user.create({
@@ -50,7 +50,7 @@ export class AuthService{
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
-                    throw new ForbiddenException('Email already exists');
+                    throw new ForbiddenException('Correo ya registrado');
                 }
             }
             throw error;
@@ -67,12 +67,12 @@ export class AuthService{
             },
         });
         //Si el correo no existe, lanzar un error
-        if (!user) throw new ForbiddenException('Wrong credentials');
+        if (!user) throw new ForbiddenException('Credenciales incorrectas');
 
         //Si el correo existe, verificar que la contraseña sea correcta
         const pwMatches = await argon.verify(user.hash, dto.password);
 
-        if (!pwMatches) throw new ForbiddenException('Wrong credentials');
+        if (!pwMatches) throw new ForbiddenException('Credenciales incorrectas');
 
         return this.signToken(user.id, user.email);
     }

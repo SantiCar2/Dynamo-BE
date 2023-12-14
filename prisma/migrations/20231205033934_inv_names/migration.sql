@@ -12,3 +12,19 @@ ALTER TABLE "transactions" DROP COLUMN "entry";
 -- AlterTable
 ALTER TABLE "users" DROP COLUMN "password",
 ADD COLUMN     "hash" TEXT NOT NULL;
+
+-- CreateTable
+CREATE TABLE "inventoryNames" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "inventoryNames_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "inventoryNames_name_key" ON "inventoryNames"("name");
+
+-- AddForeignKey
+ALTER TABLE "inventories" ADD CONSTRAINT "inventories_name_fkey" FOREIGN KEY ("name") REFERENCES "inventoryNames"("name") ON DELETE RESTRICT ON UPDATE CASCADE;

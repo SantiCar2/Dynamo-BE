@@ -15,6 +15,7 @@ model User {
   email     String   @unique
   name      String?
   hash      String
+  role      String   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -52,33 +53,45 @@ model Product {
   // product           Product  @relation(fields: [parentProductSKU], references: [SKU])
   // parentProductSKU  String   @unique
 
+  deliveries          Delivery[]
   inventories       Inventory[]
   transactions      Transaction[]
 
   @@map("products")
 }
 
+model InventoryName {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  inventories Inventory[]
+  @@map("inventoryNames")
+}
+
 model Inventory {
   id          Int      @id @default(autoincrement())
+  name        String
   quantity    Int
   productSKU  String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  InventoryName  InventoryName @relation(fields: [name], references: [name])
   product     Product  @relation(fields: [productSKU], references: [SKU])
   @@map("inventories")
 }
 
 model Transaction {
   id            Int       @id @default(autoincrement())
-  quantity      Int
   createdAt     DateTime  @default(now())
 
   price         Float     //Precio de venta
   envioColombia Float     //Precio de envio a Colombia
   costoDolares  Float     //Costo en dolares
-  arancel       Float     //Arancel
-  iva           Float     //IVA
+  // arancel       Float     //Arancel 15%
+  // iva           Float     //IVA 19%
   empaque       Float     //Empaque
   publicidad    Float     //Publicidad
   gastosOficina Float     //Gastos de oficina
@@ -90,5 +103,18 @@ model Transaction {
   product     Product  @relation(fields: [productSKU], references: [SKU])
   productSKU  String
   @@map("transactions")
+}
+
+model Delivery {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+
+  //Producto
+  productSKU    String
+  product       Product  @relation(fields: [productSKU], references: [SKU])
+
+  @@map("deliveries") 
 }
 

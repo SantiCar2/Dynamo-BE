@@ -9,6 +9,7 @@ export class DataController {
 
     @Get('productosTable')
     async getProductsTable() {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         return this.dataService.getProducts();
     }
 

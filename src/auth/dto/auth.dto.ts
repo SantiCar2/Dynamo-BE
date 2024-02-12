@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString,  } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString,  } from "class-validator";
+
 
 export class AuthDto {
     @IsEmail()
@@ -14,6 +15,10 @@ export class AuthDto {
 
     @IsNumber()
     twoFA: number;
+
+    @IsString()
+    role: string;
+    
 }
 
 export class LoginDto {

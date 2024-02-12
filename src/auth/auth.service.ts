@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { AuthDto, LoginDto } from "./dto";
 import * as argon from 'argon2';
@@ -34,18 +34,21 @@ export class AuthService{
 
         // console.log(isValid, this.config.get('2STEP_SECRET'), dto.twoFA);
 
-        if (!isValid) throw new ForbiddenException('Token de verificación de dos pasos inválido');
+        //if (!isValid) throw new ForbiddenException('Token de verificación de dos pasos inválido');
         //Guardar el usuario en la base de datos
+        if (dto.role != 'admin' && dto.role != 'user') throw new BadRequestException('Rol inválido');
+
         try {
             const user = await this.prisma.user.create({
                 data: {
                     email: dto.email,
                     hash: hash,
                     name: dto.name,
+                    role: dto.role,
                 },
             });
 
-            return this.signToken(user.id, user.email);
+            return this.signToken(user.id, user.email, user.role);
             
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
@@ -57,7 +60,6 @@ export class AuthService{
         }
         
         
-       
     }
     async login(dto: LoginDto){
         //Buscar el correo en la base de datos
@@ -74,15 +76,16 @@ export class AuthService{
 
         if (!pwMatches) throw new ForbiddenException('Credenciales incorrectas');
 
-        return this.signToken(user.id, user.email);
+        return this.signToken(user.id, user.email, user.role);
     }
 
 
     //Generar un token JWT con la información del usuario
-    async signToken(userId: number, email: string): Promise<{ access_token: string }> {
+    async signToken(userId: number, email: string, role: string): Promise<{ access_token: string }> {
         const payload = { 
             sub: userId, 
-            email: email 
+            email: email,
+            role: role
         };
 
         const secret = this.config.get('JWT_SECRET');

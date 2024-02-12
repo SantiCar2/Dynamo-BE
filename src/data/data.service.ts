@@ -30,7 +30,7 @@ export class DataService {
 
         const transformedResult = result.map((inventory) => {
             return {
-                Iventario: inventory.name,
+                Inventario: inventory.name,
                 SKU: inventory.product.SKU,
                 Nombre: inventory.product.name,
                 Cantidad: inventory.quantity,

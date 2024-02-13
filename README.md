@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/SantiCar2/Dynamo-BE/actions/workflows/nodejs.yml/badge.svg)](https://github.com/SantiCar2/Dynamo-BE/actions/workflows/nodejs.yml)
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>

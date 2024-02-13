@@ -41,7 +41,7 @@ jobs:
       run: |
         sudo rm -rf /home/aggu/BE
         sudo mkdir /home/aggu/BE
-        sudo cp /home/aggu/actions-runnerBE/_work/Dynamo-BE/Dynamo-BE/dist/* /home/aggu/BE
+        sudo cp -a /home/aggu/actions-runnerBE/_work/Dynamo-BE/Dynamo-BE/dist/* /home/aggu/BE
     - name: Run server with pm2
       run: |
         sudo pm2 start /home/aggu/BE --name Dynamo-BE

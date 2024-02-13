@@ -30,9 +30,9 @@ jobs:
         npm install pm2@latest -g
     - name: Create .env file
       run: |
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > /home/aggu/actions-runner/_work/Dynamo-BE/.env
-        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/aggu/actions-runner/_work/Dynamo-BE/.env
-        echo "2STEP_SECRET=${{ secrets.STEP_SECRET }}" >> /home/aggu/actions-runner/_work/Dynamo-BE/.env
+        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > /home/aggu/actions-runnerBE/_work/Dynamo-BE/.env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/aggu/actions-runnerBE/_work/Dynamo-BE/.env
+        echo "2STEP_SECRET=${{ secrets.STEP_SECRET }}" >> /home/aggu/actions-runnerBE/_work/Dynamo-BE/.env
     - name: Build
       run: |
         npm run build
@@ -40,7 +40,7 @@ jobs:
       run: |
         sudo rm -rf /home/aggu/BE
         sudo mkdir /home/aggu/BE
-        sudo cp /home/aggu/actions-runner/_work/Dynamo-BE/dist/* /home/aggu/BE
+        sudo cp /home/aggu/actions-runnerBE/_work/Dynamo-BE/dist/* /home/aggu/BE
     - name: Run server with pm2
       run: |
         sudo pm2 start /home/aggu/BE --name Dynamo-BE

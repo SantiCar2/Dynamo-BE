@@ -44,4 +44,4 @@ jobs:
         sudo cp -a /home/aggu/actions-runnerBE/_work/Dynamo-BE/Dynamo-BE/dist/* /home/aggu/BE
     - name: Run server with pm2
       run: |
-        sudo pm2 start /home/aggu/BE --name Dynamo-BE
+        sudo pm2 start /home/aggu/BE/main.js --name Dynamo-BE
